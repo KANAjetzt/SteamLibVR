@@ -21,13 +21,16 @@ app.use(async (req, res, next) => {
   // 736260
   // 1506510
   // 1455840
-  const appId = 1248130;
+  const appId = 1455840;
 
-  const gameReq = await fetch(
-    `https://store.steampowered.com/api/appdetails?appids=${appId}`
-  );
+  // const gameReq = await fetch(
+  //   `https://store.steampowered.com/api/appdetails?appids=${appId}`
+  // );
+
+  const gameReq = await fetch('http://localhost:3000/data/gameInfo.json')
 
   const gameInfo = await gameReq.json();
+  
   req.gameInfo = gameInfo[appId].data;
 
   next();
@@ -39,4 +42,12 @@ app.get("/", (req, res) => {
 
 app.get("/front", (req, res) => {
   res.status(200).render("front", { gameInfo: req.gameInfo });
+});
+
+app.get("/back", (req, res) => {
+  res.status(200).render("back", { gameInfo: req.gameInfo });
+});
+
+app.get("/side", (req, res) => {
+  res.status(200).render("side", { gameInfo: req.gameInfo });
 });

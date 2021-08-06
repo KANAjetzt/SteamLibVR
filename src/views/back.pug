@@ -1,0 +1,19 @@
+extends base
+
+block content
+ .back(style=`background-image:url(${gameInfo.background})`)
+    //- img(class='back__bg' src=`${gameInfo.background}`)
+    .back__imgs
+      img(class='back__ssBig' src=`${gameInfo.screenshots[0].path_full}`)
+      img(class='back__ssSmall' src=`${gameInfo.screenshots[1].path_full}`)
+      img(class='back__ssSmall' src=`${gameInfo.screenshots[2].path_full}`)
+      img(class='back__ssSmall' src=`${gameInfo.screenshots[3].path_full}`)
+    // short description
+    .back__shortDesc
+      p= gameInfo.short_description
+    // system requirements
+    .back__systemReq
+      p(class='back__systemReq--min')
+      p(class='back__systemReq--max')
+  
+    script(src='/js/back.js')
