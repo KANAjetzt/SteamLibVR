@@ -2,6 +2,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import express from "express";
 import fetch from "node-fetch";
+import captureWebsite from 'capture-website';
 
 // Start express app
 export const app = express();
@@ -21,7 +22,7 @@ app.use(async (req, res, next) => {
   // 736260
   // 1506510
   // 1455840
-  const appId = 1455840;
+  req.appId = 1455840;
 
   // const gameReq = await fetch(
   //   `https://store.steampowered.com/api/appdetails?appids=${appId}`
@@ -31,7 +32,7 @@ app.use(async (req, res, next) => {
 
   const gameInfo = await gameReq.json();
   
-  req.gameInfo = gameInfo[appId].data;
+  req.gameInfo = gameInfo[req.appId].data;
 
   next();
 });
@@ -51,3 +52,17 @@ app.get("/back", (req, res) => {
 app.get("/side", (req, res) => {
   res.status(200).render("side", { gameInfo: req.gameInfo });
 });
+
+app.get("/cover", async (req, res) => {
+  await captureWebsite.file('http://localhost:3000/', `${__dirname}/export/${req.appId}.png`, {
+    type: 'jpeg',
+    width: 1260,
+    height: 900,
+    scaleFactor: 1
+  });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'cover created'
+  });
+})
