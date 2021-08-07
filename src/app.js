@@ -1,8 +1,13 @@
+import { promisify } from "util";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import express from "express";
 import fetch from "node-fetch";
 import captureWebsite from "capture-website";
+import cors from 'cors'
+
+const readDirAsync = promisify(fs.readdir);
 
 // Start express app
 export const app = express();
@@ -16,6 +21,10 @@ app.use(express.static(`${__dirname}/public`));
 app.set("view engine", "pug");
 app.set("views", `${__dirname}/views`);
 
+app.use(cors())
+
+app.options('*', cors())
+
 app.use(async (req, res, next) => {
   // 916440
   // 1248130
@@ -23,7 +32,7 @@ app.use(async (req, res, next) => {
   // 1506510
   // 1455840
   // 858820
-  req.appId = 858820;
+  
 
   const gameReq = await fetch(
     `https://store.steampowered.com/api/appdetails?appids=${req.appId}`
@@ -77,5 +86,14 @@ app.get("/cover", async (req, res) => {
   res.status(200).json({
     status: "success",
     message: "cover created",
+  });
+});
+
+app.get("/covers", async (req, res) => {
+  const files = await readDirAsync(`${__dirname}/export`);
+
+  res.status(200).json({
+    status: "success",
+    data: files,
   });
 });
