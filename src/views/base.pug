@@ -7,13 +7,24 @@ html
       link(rel='stylesheet' href='/css/style.css')
       title Cover
 
-  body
+  body(data-appId=`${appId}`)
     // CONTENT
+    .frontSide
+      //- h1= gameInfo.name
+
     .front
-      img(class='front__screenshot' src=`http://localhost:3000/img/cover.jpg`)
+      //- img(class='front__screenshot' src=`http://localhost:3000/img/cover.jpg`)
+      img(class='front__screenshot' src=`https://steamcdn-a.akamaihd.net/steam/apps/${appId}/library_600x900.jpg`)
     
-    .side
-      h1= gameInfo.name
+    .middle 
+
+      .top 
+
+      .backSide
+        h1= gameInfo.name
+        img(class='backSide__bg' src=`https://steamcdn-a.akamaihd.net/steam/apps/${appId}/library_600x900.jpg`)
+
+      .bottom
 
     .back(style=`background-image:url(${gameInfo.background})`)
       .back__imgs

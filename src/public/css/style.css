@@ -16,6 +16,7 @@ p {
   height: 900px;
   position: relative;
   background-size: cover;
+  margin-top: 600px;
 }
 
 .front__headImg {
@@ -26,13 +27,11 @@ p {
 }
 
 .front__screenshot {
-  width: 660px;
+  width: 100%;
   height: 100%;
   object-fit: cover;
   position: absolute;
   top: 0;
-  left: 0;
-  /* filter: blur(4px); */
 }
 
 .back__bg {
@@ -46,7 +45,6 @@ p {
 }
 
 .back__imgs {
-  /* position: absolute; */
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -93,19 +91,49 @@ p {
   padding-left: 16px;
 }
 
-.side {
+.frontSide {
   width: 60px;
   height: 900px;
   position: relative;
+  margin-top: 600px;
+  background-color: #111;
+  z-index: 2;
 }
 
-.side h1 {
+.backSide {
+  width: 60px;
+  height: 900px;
+  position: relative;
+  overflow: hidden;
+}
+
+.backSide h1 {
   font-family: sans-serif;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(90deg);
   text-transform: uppercase;
-  mix-blend-mode: multiply;
-  color: #999999;
+  color: #ffffff;
+  white-space: nowrap;
+  z-index: 2;
+  mix-blend-mode: overlay;
+}
+
+.backSide__bg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+}
+
+.top,
+.bottom {
+  width: 60px;
+  height: 600px;
+  background-color: #111;
+}
+
+.bottom {
 }

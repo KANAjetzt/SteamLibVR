@@ -2,7 +2,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import express from "express";
 import fetch from "node-fetch";
-import captureWebsite from 'capture-website';
+import captureWebsite from "capture-website";
 
 // Start express app
 export const app = express();
@@ -22,47 +22,60 @@ app.use(async (req, res, next) => {
   // 736260
   // 1506510
   // 1455840
-  req.appId = 1455840;
+  // 858820
+  req.appId = 858820;
 
-  // const gameReq = await fetch(
-  //   `https://store.steampowered.com/api/appdetails?appids=${appId}`
-  // );
+  const gameReq = await fetch(
+    `https://store.steampowered.com/api/appdetails?appids=${req.appId}`
+  );
 
-  const gameReq = await fetch('http://localhost:3000/data/gameInfo.json')
+  // const gameReq = await fetch('http://localhost:3000/data/gameInfo.json')
 
   const gameInfo = await gameReq.json();
-  
+
   req.gameInfo = gameInfo[req.appId].data;
 
   next();
 });
 
 app.get("/", (req, res) => {
-  res.status(200).render("base", { gameInfo: req.gameInfo });
+  res.status(200).render("base", { gameInfo: req.gameInfo, appId: req.appId });
 });
 
 app.get("/front", (req, res) => {
-  res.status(200).render("front", { gameInfo: req.gameInfo });
+  console.log(req);
+  res.status(200).render("front", { gameInfo: req.gameInfo, appId: req.appId });
 });
 
 app.get("/back", (req, res) => {
-  res.status(200).render("back", { gameInfo: req.gameInfo });
+  res.status(200).render("back", { gameInfo: req.gameInfo, appId: req.appId });
 });
 
 app.get("/side", (req, res) => {
-  res.status(200).render("side", { gameInfo: req.gameInfo });
+  res.status(200).render("side", { gameInfo: req.gameInfo, appId: req.appId });
+});
+
+app.get("/gameInfo", async (req, res) => {
+  res.json({
+    status: "success",
+    data: req.gameInfo,
+  });
 });
 
 app.get("/cover", async (req, res) => {
-  await captureWebsite.file('http://localhost:3000/', `${__dirname}/export/${req.appId}.png`, {
-    type: 'jpeg',
-    width: 1260,
-    height: 900,
-    scaleFactor: 1
-  });
+  await captureWebsite.file(
+    "http://localhost:3000/",
+    `${__dirname}/export/${req.appId}.png`,
+    {
+      type: "jpeg",
+      width: 1320,
+      height: 2100,
+      scaleFactor: 1,
+    }
+  );
 
   res.status(200).json({
-    status: 'success',
-    message: 'cover created'
+    status: "success",
+    message: "cover created",
   });
-})
+});
