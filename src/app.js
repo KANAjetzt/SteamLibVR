@@ -6,6 +6,7 @@ import express from "express";
 import fetch from "node-fetch";
 import captureWebsite from "capture-website";
 import cors from 'cors'
+import asyncMap from './utils/asyncMap.js'
 
 const readDirAsync = promisify(fs.readdir);
 
@@ -26,23 +27,36 @@ app.use(cors())
 app.options('*', cors())
 
 app.use(async (req, res, next) => {
-  // 916440
-  // 1248130
-  // 736260
-  // 1506510
-  // 1455840
-  // 858820
+  // Get owned games
+  const ownedGamesReq = await fetch(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=&steamid=76561198029394113&include_played_free_games=true&include_appinfo=true&format=json`)
+  const ownedGamesData = await ownedGamesReq.json()
+
+  const ownedGamesAppIds = ownedGamesData.response.games.map(gameInfo => gameInfo.appid)
+
+  if(ownedGamesAppIds[0]){
+    req.gameInfo = await asyncMap(ownedGamesAppIds, async appId => {
+      try{
+        const gameReq = await fetch(
+        `https://store.steampowered.com/api/appdetails?appids=${appId}`
+      );
   
-
-  const gameReq = await fetch(
-    `https://store.steampowered.com/api/appdetails?appids=${req.appId}`
-  );
-
-  // const gameReq = await fetch('http://localhost:3000/data/gameInfo.json')
-
-  const gameInfo = await gameReq.json();
-
-  req.gameInfo = gameInfo[req.appId].data;
+      const gameInfo = await gameReq.json();
+  
+      if(gameInfo) {
+        return gameInfo[appId].data;
+      } else {
+        return undefined
+      }    
+    } catch(err) {
+      console.log(err)
+      return undefined
+    }
+    }) 
+  
+    console.log(req.gameInfo)
+  } else {
+    console.log('no appIds!')
+  }
 
   next();
 });
