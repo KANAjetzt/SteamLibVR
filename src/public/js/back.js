@@ -5,6 +5,8 @@
 
   document.querySelector(".back__systemReq--min").innerHTML =
     gameInfo.pc_requirements.minimum;
-  document.querySelector(".back__systemReq--max").innerHTML =
+    if(gameInfo.pc_requirements.recommended) {
+      document.querySelector(".back__systemReq--max").innerHTML =
     gameInfo.pc_requirements.recommended;
+    }
 })();
