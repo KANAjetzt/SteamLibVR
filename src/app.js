@@ -9,6 +9,8 @@ import captureWebsite from "capture-website";
 import cors from 'cors'
 import asyncMap from './utils/asyncMap.js'
 import asyncForEach from './utils/asyncForEach.js'
+import imagemin from 'imagemin';
+import imageminMozjpeg from 'imagemin-mozjpeg'
 
 const readDirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
@@ -120,7 +122,7 @@ app.get("/allCovers", async (req, res) => {
     // if no game data return
     if(!game) return
     
-    const coverPath = `${__dirname}/export/${req.allGames[i].steam_appid}.png`
+    const coverPath = `${__dirname}/export/${req.allGames[i].steam_appid}.jpg`
     
     // if file exist already return
     if(fs.existsSync(coverPath)) return
@@ -151,3 +153,16 @@ app.get("/covers", async (req, res) => {
     data: files,
   });
 });
+
+app.get('/compressCovers',async (req, res) => {
+ await imagemin([`${__dirname}/export/*.jpg`], {
+    destination: `${__dirname}/min`,
+    plugins: [
+      imageminMozjpeg({quality: 70})
+    ]
+  });
+
+  res.json({
+    status: 'success',
+  })
+})
