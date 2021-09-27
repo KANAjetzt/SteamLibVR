@@ -36,7 +36,7 @@ app.use(async (req, res, next) => {
   const gameData = await readFileAsync(`${__dirname}/../resources/gameInfoAll.json`)
   const gameDataJSON = JSON.parse(gameData)
   req.allGames = gameDataJSON.data
-  req.gameInfo = gameDataJSON.data[16]
+  req.gameInfo = gameDataJSON.data[12]
 
   console.log(gameDataJSON.data.length)
   
