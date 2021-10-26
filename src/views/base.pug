@@ -9,23 +9,10 @@ html
 
   body(data-appId=`${gameInfo.steam_appid}`)
     // CONTENT
-    .frontSide
-      //- h1= gameInfo.name
+    .overlay
+     img(class='overlay' src=`http://localhost:3000/img/gamePaper.png`)
 
-    .front
-      //- img(class='front__screenshot' src=`http://localhost:3000/img/cover.jpg`)
-      img(class='front__screenshot' src=`https://steamcdn-a.akamaihd.net/steam/apps/${gameInfo.steam_appid}/library_600x900.jpg`)
-    
-    .middle 
-
-      .top 
-
-      .backSide
-        h1= gameInfo.name
-        img(class='backSide__bg' src=`https://steamcdn-a.akamaihd.net/steam/apps/${gameInfo.steam_appid}/library_600x900.jpg`)
-
-      .bottom
-
+    //- .back(style=`background-image:url(http://localhost:3000/img/bg.jpg)`)
     .back(style=`background-image:url(${gameInfo.background})`)
       .back__imgs
         img(class='back__ssBig' src=`${gameInfo.screenshots[0].path_full}`)
@@ -39,5 +26,17 @@ html
       .back__systemReq
         p(class='back__systemReq--min')
         p(class='back__systemReq--max')         
+
+    .backSide
+      h1= gameInfo.name
+      img(class='backSide__bg' src=`https://steamcdn-a.akamaihd.net/steam/apps/${gameInfo.steam_appid}/library_600x900.jpg`)
+      //- img(class='backSide__bg' src=`http://localhost:3000/img/cover.jpg`)
+
+    .front
+      //- img(class='front__screenshot' src=`http://localhost:3000/img/cover.jpg`)
+      img(class='front__screenshot' src=`https://steamcdn-a.akamaihd.net/steam/apps/${gameInfo.steam_appid}/library_600x900.jpg`)
+
+
+    
     
     script(src='/js/back.js')
